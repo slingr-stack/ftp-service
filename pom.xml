@@ -9,13 +9,16 @@
     <artifactId>ftp</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>SLINGR - FTP service</name>
-    <description>Default component to manage a connection FTP to a external server with a service of the Slingr platform</description>
+    <description>Default component to manage a connection FTP to an external ftp server with a service of the Slingr platform</description>
     <packaging>jar</packaging>
     <properties>
         <!-- Slingr versions -->
         <slingr.slingr-service.version>1.4.0</slingr.slingr-service.version>
         <!-- Dependency versions -->
         <camel.version>2.18.3</camel.version>
+        <jsch.version>0.1.54</jsch.version>
+        <jakarta.version>2.3.2</jakarta.version>
+        <glassfish.version>2.3.2</glassfish.version>
         <!-- Build properties -->
         <build.main-class>io.slingr.service.ftp.Runner</build.main-class>
     </properties>
@@ -60,10 +63,23 @@
             <artifactId>camel-ftp</artifactId>
             <version>${camel.version}</version>
         </dependency>
+        <!-- JSCH dependencies -->
         <dependency>
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
-            <version>0.1.54</version>
+            <version>${jsch.version}</version>
+        </dependency>
+        <!-- Jakarta dependencies -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>${jakarta.version}</version>
+        </dependency>
+        <!-- Glassfish dependencies -->
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>${glassfish.version}</version>
         </dependency>
         <!-- Test dependencies -->
         <dependency>
