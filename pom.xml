@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.slingr-stack</groupId>
+        <artifactId>slingr-services-builder</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <artifactId>ftp</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>SLINGR - FTP service</name>
+    <description>Default component to manage a connection FTP to a external server with a service of the Slingr platform</description>
+    <packaging>jar</packaging>
+    <properties>
+        <!-- Slingr versions -->
+        <slingr.slingr-service.version>1.4.0</slingr.slingr-service.version>
+        <!-- Dependency versions -->
+        <camel.version>2.18.3</camel.version>
+        <!-- Build properties -->
+        <build.main-class>io.slingr.service.ftp.Runner</build.main-class>
+    </properties>
+    <dependencies>
+        <!-- SLINGR Service Framework -->
+        <!--suppress VulnerableLibrariesLocal -->
+        <dependency>
+            <groupId>io.github.slingr-stack</groupId>
+            <artifactId>slingr-services</artifactId>
+            <version>${slingr.slingr-service.version}</version>
+        </dependency>
+        <!-- Apache Camel Modules -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <version>${camel.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jetty</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-xstream</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-mail</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+        <!-- FTP client component for Camel -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-ftp</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.54</version>
+        </dependency>
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test</artifactId>
+            <version>${camel.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <repositories>
+        <repository>
+            <id>clojars</id>
+            <name>Clojars repository</name>
+            <url>https://clojars.org/repo</url>
+        </repository>
+    </repositories>
+</project>
