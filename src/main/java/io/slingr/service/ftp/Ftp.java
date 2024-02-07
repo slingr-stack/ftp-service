@@ -67,12 +67,14 @@ public class Ftp extends Service {
     public void uploadFile(FunctionRequest request) {
         try {
             final Json body = request.getJsonParams();
-            if (body.contains("config")) {
-                configuration = body.json("config");
-                //initProcessor();
-            } else {
-                throw ServiceException.permanent(ErrorCode.ARGUMENT, "Empty configuration");
-            }
+            /*
+                if (body.contains("config")) {
+                    configuration = body.json("config");
+                    initProcessor();
+                } else {
+                    throw ServiceException.permanent(ErrorCode.ARGUMENT, "Empty configuration");
+                }
+            */
             processor.sendFile(body.string("fileId"), body.string("folder"));
         } catch (ServiceException ex){
             throw ex;
