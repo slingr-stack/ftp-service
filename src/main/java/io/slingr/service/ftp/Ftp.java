@@ -20,39 +20,6 @@ public class Ftp extends Service {
     @ApplicationLogger
     private AppLogs appLogs;
 
-    @ServiceProperty
-    private String protocol;
-
-    @ServiceProperty
-    private String host;
-
-    @ServiceProperty
-    private String port;
-
-    @ServiceProperty
-    private String username;
-
-    @ServiceProperty
-    private String password;
-
-    @ServiceProperty
-    private String filePattern;
-
-    @ServiceProperty
-    private String inputFolder;
-
-    @ServiceProperty
-    private String archiveFolder;
-
-    @ServiceProperty
-    private String archiveGrouping;
-
-    @ServiceProperty
-    private String outputFolder;
-
-    @ServiceProperty
-    private Boolean recursive;
-
     @ServiceConfiguration
     private Json configuration;
 
@@ -62,13 +29,16 @@ public class Ftp extends Service {
     public void serviceStarted() {
         logger.info(String.format("Initializing service [%s]", SERVICE_NAME));
         appLogs.info(String.format("Initializing service [%s]", SERVICE_NAME));
-        logger.info(String.format("Service configuration [%s]", configuration.toPrettyString()));
+        //initProcessor();
     }
 
     private void initProcessor() {
+        logger.info(String.format("Service configuration [%s]", configuration.toPrettyString()));
         processor = new Processor(appLogs(), events(), files(), properties().getApplicationName(), properties().isLocalDeployment(),
-                protocol, host, port, username, password, filePattern, inputFolder, archiveFolder, archiveGrouping,
-                recursive, outputFolder);
+                configuration.string("protocol"), configuration.string("host"), configuration.string("port"),
+                configuration.string("username"), configuration.string("password"), configuration.string("filePattern"),
+                configuration.string("inputFolder"), configuration.string("archiveFolder"), configuration.string("archiveGrouping"),
+                configuration.bool("recursive"), configuration.string("outputFolder"));
         processor.start();
     }
 
@@ -88,11 +58,20 @@ public class Ftp extends Service {
     public void uploadFile(FunctionRequest request){
         try {
             final Json body = request.getJsonParams();
+            if (body.contains("config")) {
+                configuration= body.json("config");
+                this.initProcessor();
+            } else {
+                throw ServiceException.permanent(ErrorCode.ARGUMENT, "Empty configuration");
+            }
             processor.sendFile(body.string("fileId"), body.string("folder"));
         } catch (ServiceException ex){
             throw ex;
         } catch (Exception ex){
             throw ServiceException.permanent(ErrorCode.GENERAL, String.format("An exception happened in the service: %s", ex.getMessage()), ex);
+        }
+        finally {
+            this.stopProcessor();
         }
     }
 }
