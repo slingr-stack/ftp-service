@@ -21,8 +21,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * In charge of uploading files into application.
- *
- * Created by dgaviola on 31/8/15.
  */
 public class FilesService {
     private static final Logger logger = LoggerFactory.getLogger(FilesService.class);
@@ -59,10 +57,7 @@ public class FilesService {
     }
 
     @Handler @SuppressWarnings("unused") // used on Service routes
-    /**
-     * @see FILES_SERVICE_METHOD_NEW_FILE
-     */
-    public Json newFile(@Body InputStream is, @Headers Map headers){
+    public Json newFile(@Body InputStream is, @Headers Map<String, Object> headers){
         lastSync.set(System.currentTimeMillis());
         if(is == null){
             headers.put(HEADER_NOT_EMPTY, false);
@@ -105,9 +100,6 @@ public class FilesService {
     }
 
     @Handler @SuppressWarnings("unused") // used on Service routes
-    /**
-     * @see FILES_SERVICE_METHOD_DOWNLOAD_FILE
-     */
     public void downloadFile(@Body Json body, @Headers Map<String, String> headers) {
         String fileId = body.string("fileId");
         if(StringUtils.isBlank(fileId)){
@@ -163,9 +155,6 @@ public class FilesService {
 
 
     @Handler @SuppressWarnings("unused") // used on Service routes
-    /**
-     * @see FILES_SERVICE_METHOD_UPLOAD_FILE
-     */
     public void uploadFile(Exchange exchange, @Header(HEADER_LOCAL_FILE_PATH) String localFilePath) {
         if(StringUtils.isBlank(localFilePath)){
             final ServiceException re = ServiceException.permanent(ErrorCode.CLIENT, String.format("The copy of the file [%s] on service is invalid. The file will not be uploaded to ftp.", localFilePath));
@@ -185,9 +174,6 @@ public class FilesService {
     }
 
     @Handler @SuppressWarnings("unused") // used on Service routes
-    /**
-     * @see FILES_SERVICE_NO_FILES
-     */
     public void noFiles(){
         int val = noFilesCounter.getAndIncrement();
         if(val > PERIODS_BETWEEN_NOT_FILE_MESSAGES || val < 0){
@@ -200,7 +186,4 @@ public class FilesService {
         }
     }
 
-    public long lastSyncPeriod(){
-        return System.currentTimeMillis() - lastSync.get();
-    }
 }

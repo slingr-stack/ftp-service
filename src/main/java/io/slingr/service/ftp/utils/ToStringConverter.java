@@ -39,14 +39,14 @@ public final class ToStringConverter {
     }
 
     @Converter(allowNull = true)
-    @SuppressWarnings({"unused", "unchecked"}) // used by Camel converters schema
-    public static String fromMap(Map message) {
+    @SuppressWarnings({"unused"}) // used by Camel converters schema
+    public static String fromMap(Map<String, Object> message) {
         return Json.fromMap(message).toString();
     }
 
     @Converter(allowNull = true)
-    @SuppressWarnings({"unused", "unchecked"}) // used by Camel converters schema
-    public static String fromList(List message) {
+    @SuppressWarnings({"unused"}) // used by Camel converters schema
+    public static String fromList(List<Object> message) {
         return Json.fromList(message).toString();
     }
 
@@ -63,7 +63,7 @@ public final class ToStringConverter {
         } else if (message instanceof Map) {
             return fromMap((Map<String, Object>) message);
         } else if (message instanceof List) {
-            return fromList((List) message);
+            return fromList((List<Object>) message);
         } else if (message instanceof StreamCache) {
             try{
                 return new String(StreamCacheConverter.convertToByteArray((StreamCache) message, exchange));

@@ -8,16 +8,10 @@ import org.apache.camel.component.file.remote.SftpOperations;
 import org.apache.log4j.Logger;
 
 /**
- * Same functionality of Secure FTP Operations but rewrite the /root/.ssh/known_hosts file
- *
- * Created by lefunes on 15/05/17.
+ * Same functionality of Secure FTP Operations but rewrite the /root/.ssh/known_hosts file.
  */
 public class CustomSftpOperations extends SftpOperations {
     private static final Logger logger = Logger.getLogger(CustomSftpOperations.class);
-
-    public CustomSftpOperations() {
-        super();
-    }
 
     public CustomSftpOperations(Proxy proxy) {
         super(proxy);
@@ -47,7 +41,7 @@ public class CustomSftpOperations extends SftpOperations {
 
             public boolean promptYesNo(String s) {
                 logger.warn("Server asks for confirmation (yes|no): " + s + ". Endpoint will answer yes.");
-                // Return 'true' indicating modification of the hosts file is enabled.
+                // Return 'true' indicating modification of the host file is enabled.
                 return true;
             }
 
@@ -56,7 +50,7 @@ public class CustomSftpOperations extends SftpOperations {
             }
 
             public String[] promptKeyboardInteractive(String destination, String name, String instruction, String[] prompt, boolean[] echo) {
-                // must return an empty array if password is null
+                // must return an empty array if the password is null
                 if (configuration.getPassword() == null) {
                     return new String[0];
                 } else {

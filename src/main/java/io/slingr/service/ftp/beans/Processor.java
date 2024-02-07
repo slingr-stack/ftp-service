@@ -40,7 +40,7 @@ public class Processor extends RouteBuilder {
     private final Main main = new Main();
 
     private final String name;
-    private boolean localDeployment;
+    private final boolean localDeployment;
     private final Protocol protocol;
     private final String host;
     private final String port;
@@ -87,8 +87,8 @@ public class Processor extends RouteBuilder {
         final String folder1 = normalizeFolder(inputFolder);
         final String folder2 = normalizeFolder(archiveFolder);
 
-        String iFolder = null;
-        String aFolder = null;
+        String iFolder;
+        String aFolder;
         if (folder1.equals(folder2)) {
             throw new IllegalArgumentException(String.format("Input and archive folders must be different [%s]", folder1));
         } else {
@@ -113,7 +113,7 @@ public class Processor extends RouteBuilder {
         // output folder
         String outputFolder1 = normalizeFolder(outputFolder);
 
-        // add filename pattern if needed
+        // add a filename pattern if needed
         ArchiveGrouping ag = ArchiveGrouping.fromCode(archiveGrouping);
         if (ag == null) {
             ag = ArchiveGrouping.MONTHLY;
@@ -164,7 +164,7 @@ public class Processor extends RouteBuilder {
     }
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         final Json parametersToPrint = Json.map();
         parametersToPrint.set("protocol", protocol.getCode());
         parametersToPrint.set("recursive", recursive);
@@ -178,7 +178,7 @@ public class Processor extends RouteBuilder {
         final List<String> options = new ArrayList<>();
         final List<String> uploadOptions = new ArrayList<>();
 
-        String uploadUri = null;
+        String uploadUri;
         if (StringUtils.isBlank(username)) {
             uri = protocol.getCode() + "://" + host + ":" + port + "/" + inputFolder;
             uploadUri = protocol.getCode() + "://" + host + ":" + port + "/" + parentOutputFolder;
@@ -298,7 +298,7 @@ public class Processor extends RouteBuilder {
         // Events
         ///////////////////////////////////////////////////////////////////////////////////////////
 
-        logger.info(String.format("Starting FTP service with parameters: %s", parametersToPrint.toString()));
+        logger.info(String.format("Starting FTP service with parameters: %s", parametersToPrint));
 
         from(uri)
                 .routeId("ftp-new-file-event")
@@ -374,8 +374,8 @@ public class Processor extends RouteBuilder {
     }
 
     /**
-     * Returns a value builder that extract the exception and returns the error message in JSON.
-     * Also if the exception is of type {@link ServiceException} it will return details of the
+     * Returns a value builder that extracts the exception and returns the error message in JSON.
+     * Also, if the exception is of type {@link ServiceException} it will return details of the
      * exception in the JSON.
      *
      * @return the value builder to extract exception information

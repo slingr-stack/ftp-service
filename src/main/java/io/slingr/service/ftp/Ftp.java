@@ -4,9 +4,8 @@ import io.slingr.service.ftp.beans.Processor;
 import io.slingr.services.Service;
 import io.slingr.services.exceptions.ErrorCode;
 import io.slingr.services.exceptions.ServiceException;
-import io.slingr.services.framework.annotations.ServiceFunction;
-import io.slingr.services.framework.annotations.ServiceProperty;
-import io.slingr.services.framework.annotations.SlingrService;
+import io.slingr.services.framework.annotations.*;
+import io.slingr.services.services.AppLogs;
 import io.slingr.services.utils.Json;
 import io.slingr.services.ws.exchange.FunctionRequest;
 import org.slf4j.Logger;
@@ -15,46 +14,55 @@ import org.slf4j.LoggerFactory;
 @SlingrService(name = "ftp")
 public class Ftp extends Service {
 
+    private static final String SERVICE_NAME = "ftp";
     private static final Logger logger = LoggerFactory.getLogger(Ftp.class);
 
-    @ServiceProperty(name = "protocol")
+    @ApplicationLogger
+    private AppLogs appLogs;
+
+    @ServiceProperty
     private String protocol;
 
-    @ServiceProperty(name = "host")
+    @ServiceProperty
     private String host;
 
-    @ServiceProperty(name = "port")
+    @ServiceProperty
     private String port;
 
-    @ServiceProperty(name = "username")
+    @ServiceProperty
     private String username;
 
-    @ServiceProperty(name = "password")
+    @ServiceProperty
     private String password;
 
-    @ServiceProperty(name = "filePattern")
+    @ServiceProperty
     private String filePattern;
 
-    @ServiceProperty(name = "inputFolder")
+    @ServiceProperty
     private String inputFolder;
 
-    @ServiceProperty(name = "archiveFolder")
+    @ServiceProperty
     private String archiveFolder;
 
-    @ServiceProperty(name = "archiveGrouping")
+    @ServiceProperty
     private String archiveGrouping;
 
-    @ServiceProperty(name = "outputFolder")
+    @ServiceProperty
     private String outputFolder;
 
-    @ServiceProperty(name = "recursive")
+    @ServiceProperty
     private Boolean recursive;
+
+    @ServiceConfiguration
+    private Json configuration;
 
     private Processor processor = null;
 
     @Override
     public void serviceStarted() {
-        logger.info("Starting FTP service");
+        logger.info(String.format("Initializing service [%s]", SERVICE_NAME));
+        appLogs.info(String.format("Initializing service [%s]", SERVICE_NAME));
+        logger.info(String.format("Service configuration [%s]", configuration.toPrettyString()));
         processor = new Processor(appLogs(), events(), files(), properties().getApplicationName(), properties().isLocalDeployment(),
                 protocol, host, port, username, password, filePattern, inputFolder, archiveFolder, archiveGrouping,
                 recursive, outputFolder);
