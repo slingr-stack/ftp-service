@@ -29,17 +29,25 @@ public class Ftp extends Service {
     public void serviceStarted() {
         logger.info(String.format("Initializing service [%s]", SERVICE_NAME));
         appLogs.info(String.format("Initializing service [%s]", SERVICE_NAME));
-        //initProcessor();
+        initProcessor();
     }
 
     private void initProcessor() {
         logger.info(String.format("Service configuration [%s]", configuration.toPrettyString()));
-        processor = new Processor(appLogs(), events(), files(), properties().getApplicationName(), properties().isLocalDeployment(),
-                configuration.string("protocol"), configuration.string("host"), configuration.string("port"),
-                configuration.string("username"), configuration.string("password"), configuration.string("filePattern"),
-                configuration.string("inputFolder"), configuration.string("archiveFolder"), configuration.string("archiveGrouping"),
-                configuration.bool("recursive"), configuration.string("outputFolder"));
-        processor.start();
+        if(processor == null) {
+            processor = new Processor(appLogs(), events(), files(), properties().getApplicationName(), properties().isLocalDeployment(),
+                    configuration.string("protocol"), configuration.string("host"), configuration.string("port"),
+                    configuration.string("username"), configuration.string("password"),
+                    configuration.string("filePattern") != null ? configuration.string("filePattern") : "",
+                    configuration.string("inputFolder") != null ? configuration.string("inputFolder") : "",
+                    configuration.string("archiveFolder"), configuration.string("archiveGrouping"),
+                    configuration.bool("recursive"),
+                    configuration.string("outputFolder") != null ? configuration.string("outputFolder") : "");
+            processor.start();
+        } else {
+            stopProcessor();
+            initProcessor();
+        }
     }
 
     @Override
@@ -49,18 +57,19 @@ public class Ftp extends Service {
     }
 
     private void stopProcessor() {
-        if(processor != null){
+        if(processor != null) {
             processor.stop();
+            processor = null;
         }
     }
 
     @ServiceFunction(name = "uploadFile")
-    public void uploadFile(FunctionRequest request){
+    public void uploadFile(FunctionRequest request) {
         try {
             final Json body = request.getJsonParams();
             if (body.contains("config")) {
-                configuration= body.json("config");
-                this.initProcessor();
+                configuration = body.json("config");
+                //initProcessor();
             } else {
                 throw ServiceException.permanent(ErrorCode.ARGUMENT, "Empty configuration");
             }
@@ -69,9 +78,8 @@ public class Ftp extends Service {
             throw ex;
         } catch (Exception ex){
             throw ServiceException.permanent(ErrorCode.GENERAL, String.format("An exception happened in the service: %s", ex.getMessage()), ex);
-        }
-        finally {
-            this.stopProcessor();
+        } finally {
+            //stopProcessor();
         }
     }
 }
