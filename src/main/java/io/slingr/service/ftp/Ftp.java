@@ -63,6 +63,9 @@ public class Ftp extends Service {
         logger.info(String.format("Initializing service [%s]", SERVICE_NAME));
         appLogs.info(String.format("Initializing service [%s]", SERVICE_NAME));
         logger.info(String.format("Service configuration [%s]", configuration.toPrettyString()));
+    }
+
+    private void initProcessor() {
         processor = new Processor(appLogs(), events(), files(), properties().getApplicationName(), properties().isLocalDeployment(),
                 protocol, host, port, username, password, filePattern, inputFolder, archiveFolder, archiveGrouping,
                 recursive, outputFolder);
@@ -72,7 +75,10 @@ public class Ftp extends Service {
     @Override
     public void serviceStopped(String cause) {
         logger.info(String.format("Stopping FTP service: %s", cause));
+        stopProcessor();
+    }
 
+    private void stopProcessor() {
         if(processor != null){
             processor.stop();
         }
