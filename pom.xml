@@ -19,6 +19,7 @@
         <jsch.version>0.1.54</jsch.version>
         <jakarta.version>2.3.2</jakarta.version>
         <glassfish.version>2.3.2</glassfish.version>
+        <slf4j.version>2.0.7</slf4j.version>
         <!-- Build properties -->
         <build.main-class>io.slingr.service.ftp.Runner</build.main-class>
     </properties>
@@ -80,6 +81,17 @@
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
             <version>${glassfish.version}</version>
+        </dependency>
+        <!-- Logging dependencies -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
         <!-- Test dependencies -->
         <dependency>
