@@ -48,7 +48,7 @@ public class Ftp extends Service {
     private String outputFolder;
 
     @ServiceProperty(name = "recursive")
-    private Boolean recursive;
+    private String recursive;
 
     private Processor processor = null;
 
