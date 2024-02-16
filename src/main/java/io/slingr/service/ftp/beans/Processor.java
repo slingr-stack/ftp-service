@@ -55,7 +55,7 @@ public class Processor extends RouteBuilder {
 
     public Processor(AppLogs appLogs, Events events, Files files, String name, boolean localDeployment,
                      String protocol, String host, String port, String username, String password, String filePattern,
-                     String inputFolder, String archiveFolder, String archiveGrouping, String recursive, String outputFolder
+                     String inputFolder, String archiveFolder, String archiveGrouping, Boolean recursive, String outputFolder
     ) {
         this.appLogs = appLogs;
         this.events = events;
@@ -99,7 +99,7 @@ public class Processor extends RouteBuilder {
             }
         }
 
-        this.recursive = recursive.equals("enabled");
+        this.recursive = Boolean.TRUE.equals(recursive);
         if(this.recursive){
             if(folder1.startsWith(folder2)){
                 throw new IllegalArgumentException(
