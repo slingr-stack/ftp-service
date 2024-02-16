@@ -2,6 +2,7 @@ package io.slingr.service.ftp;
 
 import io.slingr.service.ftp.beans.Processor;
 import io.slingr.services.Service;
+import io.slingr.services.configurations.Configuration;
 import io.slingr.services.exceptions.ErrorCode;
 import io.slingr.services.exceptions.ServiceException;
 import io.slingr.services.framework.annotations.ServiceFunction;
@@ -48,7 +49,7 @@ public class Ftp extends Service {
     private String outputFolder;
 
     @ServiceProperty(name = "recursive")
-    private Boolean recursive;
+    private String recursive;
 
     private Processor processor = null;
 
@@ -57,7 +58,7 @@ public class Ftp extends Service {
         logger.info("Starting FTP service");
         processor = new Processor(appLogs(), events(), files(), properties().getApplicationName(), properties().isLocalDeployment(),
                 protocol, host, port, username, password, filePattern, inputFolder, archiveFolder, archiveGrouping,
-                recursive, outputFolder);
+                Configuration.parseBooleanValue(recursive), outputFolder);
         processor.start();
     }
 
