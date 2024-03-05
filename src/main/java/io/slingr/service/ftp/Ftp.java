@@ -2,10 +2,12 @@ package io.slingr.service.ftp;
 
 import io.slingr.service.ftp.beans.Processor;
 import io.slingr.services.Service;
-import io.slingr.services.configurations.Configuration;
 import io.slingr.services.exceptions.ErrorCode;
 import io.slingr.services.exceptions.ServiceException;
-import io.slingr.services.framework.annotations.*;
+import io.slingr.services.framework.annotations.ApplicationLogger;
+import io.slingr.services.framework.annotations.ServiceConfiguration;
+import io.slingr.services.framework.annotations.ServiceFunction;
+import io.slingr.services.framework.annotations.SlingrService;
 import io.slingr.services.services.AppLogs;
 import io.slingr.services.utils.Json;
 import io.slingr.services.ws.exchange.FunctionRequest;
@@ -23,33 +25,6 @@ public class Ftp extends Service {
 
     @ServiceConfiguration
     private Json configuration;
-
-    @ServiceProperty(name = "port")
-    private String port;
-
-    @ServiceProperty(name = "username")
-    private String username;
-
-    @ServiceProperty(name = "password")
-    private String password;
-
-    @ServiceProperty(name = "filePattern")
-    private String filePattern;
-
-    @ServiceProperty(name = "inputFolder")
-    private String inputFolder;
-
-    @ServiceProperty(name = "archiveFolder")
-    private String archiveFolder;
-
-    @ServiceProperty(name = "archiveGrouping")
-    private String archiveGrouping;
-
-    @ServiceProperty(name = "outputFolder")
-    private String outputFolder;
-
-    @ServiceProperty(name = "recursive")
-    private Boolean recursive;
 
     private Processor processor = null;
 
@@ -69,7 +44,7 @@ public class Ftp extends Service {
                     configuration.string("filePattern") != null ? configuration.string("filePattern") : "",
                     configuration.string("inputFolder") != null ? configuration.string("inputFolder") : "",
                     configuration.string("archiveFolder"), configuration.string("archiveGrouping"),
-                    configuration.bool("recursive"),
+                    configuration.string("recursive").equals("enabled"),
                     configuration.string("outputFolder") != null ? configuration.string("outputFolder") : "");
             processor.start();
         } else {
@@ -95,21 +70,11 @@ public class Ftp extends Service {
     public void uploadFile(FunctionRequest request) {
         try {
             final Json body = request.getJsonParams();
-            /*
-                if (body.contains("config")) {
-                    configuration = body.json("config");
-                    initProcessor();
-                } else {
-                    throw ServiceException.permanent(ErrorCode.ARGUMENT, "Empty configuration");
-                }
-            */
             processor.sendFile(body.string("fileId"), body.string("folder"));
         } catch (ServiceException ex){
             throw ex;
         } catch (Exception ex){
             throw ServiceException.permanent(ErrorCode.GENERAL, String.format("An exception happened in the service: %s", ex.getMessage()), ex);
-        } finally {
-            //stopProcessor();
         }
     }
 }

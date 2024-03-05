@@ -237,6 +237,10 @@ public class Processor extends RouteBuilder {
         uploadOptions.add("binary=true");
         parametersToPrint.set("binary", true);
 
+        options.add("useUserKnownHostsFile=false");
+        uploadOptions.add("useUserKnownHostsFile=false");
+        parametersToPrint.set("useUserKnownHostsFile", false);
+
         // we process one file at a time to avoid issues in some cases better to be safe than fast as we have had many issues in the past
         options.add("maxMessagesPerPoll=1");
         parametersToPrint.set("maxMessagesPerPoll", 1);
