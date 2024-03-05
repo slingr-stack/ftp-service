@@ -200,7 +200,11 @@ public class Processor extends RouteBuilder {
             // change default SFTP component
             final CamelContext context = getContext();
             final SftpComponent sftpComponent;
-            sftpComponent = new SftpComponent();
+            if(localDeployment) {
+                sftpComponent = new SftpComponent();
+            } else {
+                sftpComponent = new CustomSftpComponent();
+            }
             context.addComponent(SFTP_COMPONENT, sftpComponent);
         } else if(protocol.equals(Protocol.FTPS)){
             // change default FTPS security values
