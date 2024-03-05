@@ -6,16 +6,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressWarnings("SpellCheckingInspection")
 public class FtpTest {
 
     private static final Logger logger = LoggerFactory.getLogger(FtpTest.class);
 
-    private static ServiceTests test;
-
     @BeforeClass
     public static void init() throws Exception {
-        test = ServiceTests.start(new io.slingr.service.ftp.Runner(), "test.properties");
+        ServiceTests test = ServiceTests.start(new Runner(), "test.properties");
     }
 
     @Test

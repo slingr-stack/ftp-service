@@ -23,9 +23,6 @@ import java.util.regex.Pattern;
 
 /**
  * Utility classes to work with emails.
- *
- * User: dgaviola
- * Date: 6/29/13
  */
 public class EmailHelper {
     private static final Logger logger = Logger.getLogger(EmailHelper.class);
@@ -78,9 +75,7 @@ public class EmailHelper {
     public static boolean isValidEmail(String value) {
         if(StringUtils.isNotBlank(value)){
             Matcher matcher = EMAIL_ADDRESS_PATTERN.matcher(value.toUpperCase());
-            if (matcher.find()) {
-                return true;
-            }
+            return matcher.find();
         }
         return false;
     }
@@ -130,7 +125,7 @@ public class EmailHelper {
             email = email.substring(0, startIndex);
         }
 
-        // finally trim the email
+        // finally, trim the email
         return email.trim();
     }
 
@@ -368,14 +363,14 @@ public class EmailHelper {
                     switch (name.toLowerCase()) {
                         case "from":
                             final List<Json> from = processReceiversLine(value);
-                            if(from != null && !from.isEmpty()) {
+                            if(!from.isEmpty()) {
                                 json.setIfNotEmpty("fromName", from.get(0).string("name"));
                                 json.setIfNotEmpty("fromEmail", from.get(0).string("email"));
                             }
                             break;
                         case "to":
                             final List<Json> to = processReceiversLine(value);
-                            if(to != null && !to.isEmpty()) {
+                            if(!to.isEmpty()) {
                                 json.setIfNotEmpty("to", to);
                                 json.setIfNotEmpty("toName", to.get(0).string("name"));
                                 json.setIfNotEmpty("toEmail", to.get(0).string("email"));
@@ -383,13 +378,13 @@ public class EmailHelper {
                             break;
                         case "cc":
                             final List<Json> cc = processReceiversLine(value);
-                            if(cc != null && !cc.isEmpty()) {
+                            if(!cc.isEmpty()) {
                                 json.setIfNotEmpty("cc", cc);
                             }
                             break;
                         case "bcc":
                             final List<Json> bcc = processReceiversLine(value);
-                            if(bcc != null && !bcc.isEmpty()) {
+                            if(!bcc.isEmpty()) {
                                 json.setIfNotEmpty("bcc", bcc);
                             }
                             break;

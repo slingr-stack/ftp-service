@@ -24,8 +24,6 @@ import java.util.Map;
 
 /**
  * <p>Converts the inputs to Json.
- *
- * <p>Created by lefunes on 23/04/15.
  */
 @Converter
 public final class ToJsonConverter {
@@ -33,29 +31,23 @@ public final class ToJsonConverter {
 
     private static final Json stringReplaces = Json.map();
 
-    public static void registerReplace(String pattern, String replace){
-        stringReplaces.set(pattern, replace);
-    }
-
     @Converter(allowNull = true)
-    @SuppressWarnings("unchecked")
     public static Json fromMultipart(MimeMultipart message, Exchange exchange) {
         try{
             return baseFromObject(message, exchange);
         } catch (Exception ex){
-            ex.printStackTrace();
-            return fromString("{ \"error\":\""+ex.toString()+"\"}");
+            logger.error(String.valueOf(ex));
+            return fromString("{ \"error\":\""+ ex +"\"}");
         }
     }
 
     @Converter(allowNull = true)
-    @SuppressWarnings("unchecked")
     public static Json fromObject(Object message, Exchange exchange) {
         try{
             return baseFromObject(message, exchange);
         } catch (Exception ex){
-            ex.printStackTrace();
-            return fromString("{ \"error\":\""+ex.toString()+"\"}");
+            logger.error(String.valueOf(ex));
+            return fromString("{ \"error\":\""+ ex +"\"}");
         }
     }
 
@@ -66,7 +58,7 @@ public final class ToJsonConverter {
         } else if (message instanceof Map) {
             return fromMap((Map<String, Object>) message);
         } else if (message instanceof List) {
-            return fromList((List) message);
+            return fromList((List<Object>) message);
         } else if (message instanceof StreamCache) {
             final String s = new String(StreamCacheConverter.convertToByteArray((StreamCache) message, exchange));
             return fromString(s);
@@ -105,8 +97,7 @@ public final class ToJsonConverter {
     }
 
     @Converter(allowNull = true)
-    @SuppressWarnings("unchecked")
-    public static Json fromList(List message) {
+    public static Json fromList(List<Object> message) {
         Json json = Json.list();
         if(message != null && !message.isEmpty()) {
             json = Json.fromList(message);
@@ -143,10 +134,6 @@ public final class ToJsonConverter {
             }
         }
         return convertString(value, contentType);
-    }
-
-    public static Json convertString(String value) {
-        return convertString(value, (String) null);
     }
 
     public static Json convertString(String value, String contentType) {
@@ -239,7 +226,7 @@ public final class ToJsonConverter {
                     Map<String, Object> actual = map;
                     for (int i = 0; i < k.length-1 ; i++) {
                         if(!actual.containsKey(k[i])) {
-                            actual.put(k[i], new HashMap());
+                            actual.put(k[i], new HashMap<>());
                         }
                         actual = (Map<String, Object>) actual.get(k[i]);
                     }
@@ -255,7 +242,7 @@ public final class ToJsonConverter {
 
     private static Object parse(Object o){
         try {
-            final String decodedString = URLDecoder.decode(o.toString(), "UTF-8");
+            final String decodedString = URLDecoder.decode(o.toString(), StandardCharsets.UTF_8);
             try {
                 return Json.fromObject(decodedString);
             } catch (Exception ex) {

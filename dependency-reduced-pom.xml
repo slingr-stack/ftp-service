@@ -10,7 +10,7 @@
   <artifactId>ftp</artifactId>
   <name>SLINGR - FTP service</name>
   <version>1.0-SNAPSHOT</version>
-  <description>Default component to manage a connection FTP to a external server with a service of the Slingr platform</description>
+  <description>Default component to manage a connection FTP to an external ftp server with a service of the Slingr platform</description>
   <repositories>
     <repository>
       <id>clojars</id>
@@ -28,6 +28,9 @@
   </dependencies>
   <properties>
     <build.main-class>io.slingr.service.ftp.Runner</build.main-class>
+    <jsch.version>0.1.54</jsch.version>
+    <jakarta.version>2.3.2</jakarta.version>
+    <glassfish.version>2.3.2</glassfish.version>
     <slingr.slingr-service.version>1.4.0</slingr.slingr-service.version>
     <camel.version>2.18.3</camel.version>
   </properties>
