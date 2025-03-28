@@ -133,12 +133,12 @@ public class FilesService {
 
         // download the file from the service
         final DownloadedFile dwnFile = files.download(fileId);
-        if(dwnFile == null || dwnFile.getFile() == null){
+        if(dwnFile == null || dwnFile.file() == null){
             final ServiceException re = ServiceException.permanent(ErrorCode.CLIENT, String.format("It is not possible to download the file [%s] from application to service. The file will not be uploaded to ftp.", fileName));
             logger.warn(re.getMessage());
             throw re;
         }
-        final File tmp = FilesUtils.copyInputStreamToTemporaryFile(fileName, dwnFile.getFile());
+        final File tmp = FilesUtils.copyInputStreamToTemporaryFile(fileName, dwnFile.file());
         if(tmp == null || !tmp.exists()){
             final ServiceException re = ServiceException.permanent(ErrorCode.CLIENT, String.format("It is not possible to copy the file [%s] from application to service. The file will not be uploaded to ftp.", fileName));
             logger.warn(re.getMessage());
