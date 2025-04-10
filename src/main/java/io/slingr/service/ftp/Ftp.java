@@ -30,13 +30,13 @@ public class Ftp extends Service {
 
     @Override
     public void serviceStarted() {
-        logger.info(String.format("Initializing service [%s]", SERVICE_NAME));
+        logger.info("Initializing service [{}]", SERVICE_NAME);
         appLogs.info(String.format("Initializing service [%s]", SERVICE_NAME));
         initProcessor();
     }
 
     private void initProcessor() {
-        logger.info(String.format("Service configuration [%s]", configuration.toPrettyString()));
+        logger.info("Service configuration [{}]", configuration.toPrettyString());
         if(processor == null) {
             processor = new Processor(appLogs(), events(), files(), properties().getApplicationName(), properties().isLocalDeployment(),
                     configuration.string("protocol"), configuration.string("host"), configuration.string("port"),

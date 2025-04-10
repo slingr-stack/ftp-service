@@ -155,6 +155,7 @@ public class Processor extends RouteBuilder {
 
     public void stop() {
         try {
+            getContext().stop();
             main.stop();
         } catch (Exception ex) {
             String message = String.format("Error when try to stop the ftp component: %s", ex.getMessage());

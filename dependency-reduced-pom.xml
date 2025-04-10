@@ -3,7 +3,7 @@
   <parent>
     <artifactId>slingr-services-builder</artifactId>
     <groupId>io.github.slingr-stack</groupId>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -29,9 +29,9 @@
   <properties>
     <build.main-class>io.slingr.service.ftp.Runner</build.main-class>
     <jsch.version>0.1.54</jsch.version>
-    <jakarta.version>2.3.2</jakarta.version>
+    <jakarta.version>4.0.2</jakarta.version>
     <glassfish.version>2.3.2</glassfish.version>
-    <slingr.slingr-service.version>1.6.5</slingr.slingr-service.version>
+    <slingr.slingr-service.version>1.6.6</slingr.slingr-service.version>
     <camel.version>2.18.3</camel.version>
   </properties>
 </project>
